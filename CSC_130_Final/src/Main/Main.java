@@ -1,6 +1,6 @@
 // Author: 				Justin Heyman
-// Date: 				
-// Assignment: 			
+// Date: 				2021-10-12
+// Assignment: 			Checkpoint 2 (Revised)		
 // Note to Professor: 	
 
 
@@ -43,16 +43,18 @@ public class Main{
 		
 		ctrl.addSpriteToFrontBuffer(currentVec.getX(), currentVec.getY(), "ufo"); // draws the sprite in a new position each game loop
 		
-		if (vecs1.size() == 1){ // we do not lose the final elem here because it has already copied to vecs2 in the previous game loop
+		
+		if (vecs1.isEmpty()){ // Revised to restart queue when the previous queue is empty 
 			vecs1 = vecs2;
 		}
 		
 		if(timer.isTimeUp()){ // this is a time-based condition that updates the sprite position every 15 milliseconds (can modify the timer in static fields)
-			vecs1.remove(); 
-			vecs2.add(currentVec); 
-			currentVec = vecs1.peek();
+			currentVec = vecs1.poll();	// Revised
+			vecs2.add(currentVec);  	// Revised
 			timer.resetWatch();
-		}		 
+		}		
+		
+	
 	
 	} 
 	
