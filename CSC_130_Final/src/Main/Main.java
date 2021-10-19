@@ -1,61 +1,72 @@
-// Author: 				Justin Heyman
-// Date: 				2021-10-12
-// Assignment: 			Checkpoint 2 (Revised)		
-// Note to Professor: 	
+// Name: 				Justin Heyman
+// Submission Date: 	2021-10-15
+// Assignment: 			Checkpoint 3		
+// Note to Professor: 	Drawing the animation frames in paint.net took me longer than I'd like to admit. Not my forte.
 
 
 package Main;
 
-import java.awt.Color;
-import java.util.LinkedList;
-import java.util.Queue;
-
+import java.util.ArrayList;
 import Data.Vector2D;
+import Data.spriteInfo;
 import logic.Control;
 import timer.stopWatchX;
 
 public class Main{
-	// Fields (Static) below...
-	public static Color c = new Color(255, 255, 51);
-	public static boolean isImageDrawn = false;
-	public static stopWatchX timer = new stopWatchX(15); // modify timer here -- 15 ms looks like 66.7 fps -- when does gameloop bottleneck?
+	/* Fields (Static) below... */
+	
+	public static stopWatchX timer = new stopWatchX(85); /* Set timer here (milliseconds) */
+	public static Vector2D currentVec = new Vector2D(-128, 296); /* To hold temporary 2DVector Position */
+	public static int currentSpriteIndex = 0; /* Points to index in sprites ArrayList */
+	public static int frameCounter = 0; /* To hold reference to current png */
+	public static spriteInfo currentSprite = new spriteInfo(currentVec, "stick"+frameCounter); /* To hold temporary spriteInfo */
+	public static ArrayList<spriteInfo> sprites = new ArrayList<>(); /* Holds all sprite animation frames and vector positions */
+	
+	/* Fields Not Currently in Use 
 	public static Queue<Vector2D> vecs1 = new LinkedList<>();
-	public static Queue<Vector2D> vecs2 = new LinkedList<>();
-	public static Vector2D currentVec = new Vector2D(-128, 296); // -128, 296 is just off the screen and in the middle ((720/2) - (128/2) = 296)
-	// End Static fields...
+	public static Queue<Vector2D> vecs2 = new LinkedList<>(); 
+	public static boolean isImageDrawn = false;
+	public static Color c = new Color(255, 255, 51); 
+	*/
+	
+	/* End Static fields... */
 	
 	public static void main(String[] args) {
-		Control ctrl = new Control();				// Do NOT remove!
-		ctrl.gameLoop();							// Do NOT remove!
+		Control ctrl = new Control();				/* Do NOT remove! */
+		ctrl.gameLoop();							/* Do NOT remove! */
 	}
 	
 	/* This is your access to things BEFORE the game loop starts */
 	public static void start() {
-		// initial vec1 queue population
-		while (currentVec.getX() <= 1280){ // populates the queue with vector objects that go up to 1280 px
-			vecs1.add(new Vector2D(currentVec.getX(),currentVec.getY())); // Adds a new <Vector2D> type object to the queue with the current coords
-			currentVec.adjustX(4); // will increase coords of next object by 4 px
-		}		
+		
+		/* Populate array with new spriteInfo Objects */
+		while (currentVec.getX() <= 1280){
+			if (frameCounter >= 8){
+				frameCounter = 0;
+			}
+			sprites.add(new spriteInfo(new Vector2D(currentVec.getX(), currentVec.getY()), "stick"+frameCounter));
+			currentVec.adjustX(16); /* Controls Degree of Sprite Movement */
+			frameCounter++;
+		}
 	}
+	
 	
 	/* This is your access to the "game loop" (It is a "callback" method from the Control class (do NOT modify that class!))*/
 	public static void update(Control ctrl) {
 		
-		ctrl.addSpriteToFrontBuffer(currentVec.getX(), currentVec.getY(), "ufo"); // draws the sprite in a new position each game loop
+		ctrl.addSpriteToFrontBuffer(currentSprite.getCoords().getX(), currentSprite.getCoords().getY(), currentSprite.getTag());
 		
-		
-		if (vecs1.isEmpty()){ // Revised to restart queue when the previous queue is empty 
-			vecs1 = vecs2;
+		/* Time-dependent array iteration */
+		if(timer.isTimeUp()){
+			currentSprite = sprites.get(currentSpriteIndex);
+			currentSpriteIndex++; 
+			if (currentSpriteIndex == (sprites.size() - 1)){ /* Restart Array Pointer */
+				currentSpriteIndex = 0;
+			}
+			timer.resetWatch(); /* Adjust timer in fields */
 		}
-		
-		if(timer.isTimeUp()){ // this is a time-based condition that updates the sprite position every 15 milliseconds (can modify the timer in static fields)
-			currentVec = vecs1.poll();	// Revised
-			vecs2.add(currentVec);  	// Revised
-			timer.resetWatch();
-		}		
-		
 	
-	
+		
 	} 
 	
 	// Additional Static methods below...(if needed)

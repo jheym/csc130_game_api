@@ -1,3 +1,11 @@
 Art/f.png*f0
 Art/star.png*star
 Art/ufo.png*ufo
+Art/stickFrames/stick0.png*stick0
+Art/stickFrames/stick1.png*stick1
+Art/stickFrames/stick2.png*stick2
+Art/stickFrames/stick3.png*stick3
+Art/stickFrames/stick4.png*stick4
+Art/stickFrames/stick5.png*stick5
+Art/stickFrames/stick6.png*stick6
+Art/stickFrames/stick7.png*stick7
