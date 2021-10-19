@@ -1,5 +1,5 @@
 // Name: 				Justin Heyman
-// Submission Date: 	2021-10-15
+// Submission Date: 	2021-10-18
 // Assignment: 			Checkpoint 3		
 // Note to Professor: 	Drawing the animation frames in paint.net took me longer than I'd like to admit. Not my forte.
 
