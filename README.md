@@ -20,3 +20,13 @@ This project includes all of my major assignments for CSc130 at CSU, Sacramento.
   4. Load your frames into the first Queue
   5. Using a timer, two Vector2D queues, and your custom engine, make the image move from the left side of the screen to the right. Once the image reaches the end of the 
        animation, it should reset by transferring the second Queue back to the first
+
+## CP3: Using a single ArrayList to hold sprite animation frames and positional coordinates
+ The requirements for this assignment are to:
+ 1. Load your custom sprites (128 x 128) into the game engine using Art.txt
+ 2. Write the spriteInfo class using the template
+ 3. Load your frames (and coordinates) into the ArrayList in the start method
+ 4. Create a cursor variable that holds the index of your current displayed frame (relative to your ArrayList). This makes for easy updating of the next frame once a timer is up.
+ 5. Using a timer, your ArrayList, and your custom engine, make the images move from the left side of the screen to the right. Once the image reaches the end of the animation, it should reset by making the cursor index 0.
+
+ 
