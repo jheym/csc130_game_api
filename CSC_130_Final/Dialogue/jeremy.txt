@@ -1,0 +1,5 @@
+string0*Jeremy from IT: 'Looks like floor 5 broke their fax machine again. Better go see what they did to it this time.'
+string1*Jeremy from IT: 'Sigh... Someone opened a phishing link in their email again...'
+string2*Jeremy from IT: 'Why is Milton's red stapler missing? He loves that thing.'
+string3*Jeremy from IT: 'Eureka! The break room microwave is interfering with the wi-fi signal!'
+string4*Jeremy from IT: 'One of these days I am going to take a baseball bat to that stinkin' fax machine.'
