@@ -1,74 +1,71 @@
 // Name: 				Justin Heyman
-// Submission Date: 	2021-10-18
-// Assignment: 			Checkpoint 3		
-// Note to Professor: 	Drawing the animation frames in paint.net took me longer than I'd like to admit. Not my forte.
+// Due Date:		 	08 Nov 2021
+// Assignment: 			Checkpoint 4		
+// Note to Professor: 	Thanks for letting me add my own little touch!
 
 
 package Main;
 
-import java.util.ArrayList;
-import Data.Vector2D;
-import Data.spriteInfo;
+import java.awt.Color;
+import java.util.HashMap;
+import java.util.StringTokenizer;
+import java.util.Random;
+import FileIO.EZFileRead;
 import logic.Control;
 import timer.stopWatchX;
 
 public class Main{
-	/* Fields (Static) below... */
-	
-	public static stopWatchX timer = new stopWatchX(85); /* Set timer here (milliseconds) */
-	public static Vector2D currentVec = new Vector2D(-128, 296); /* To hold temporary 2DVector Position */
-	public static int currentSpriteIndex = 0; /* Points to index in sprites ArrayList */
-	public static int frameCounter = 0; /* To hold reference to current png */
-	public static spriteInfo currentSprite = new spriteInfo(currentVec, "stick"+frameCounter); /* To hold temporary spriteInfo */
-	public static ArrayList<spriteInfo> sprites = new ArrayList<>(); /* Holds all sprite animation frames and vector positions */
-	
-	/* Fields Not Currently in Use 
-	public static Queue<Vector2D> vecs1 = new LinkedList<>();
-	public static Queue<Vector2D> vecs2 = new LinkedList<>(); 
-	public static boolean isImageDrawn = false;
-	public static Color c = new Color(255, 255, 51); 
-	*/
-	
-	/* End Static fields... */
-	
+	/* Begin Static Fields*/
+	public static stopWatchX timer = new stopWatchX(5000); /* Set timer here (milliseconds) */
+	public static EZFileRead ezr = new EZFileRead("Dialogue/jeremy.txt"); /* Stores each line from file into an array */
+	public static String raw; /* Holds the raw text for StringTokenizer */
+	public static int randInt = 0; 
+	public static int tmpInt = 0; 
+	public static StringTokenizer st; /* The StringTokenizer variable need to be public */
+	public static HashMap<String, String> map = new HashMap<>(); /* map needs to be public */
+	/* End Static Fields */
+
 	public static void main(String[] args) {
 		Control ctrl = new Control();				/* Do NOT remove! */
 		ctrl.gameLoop();							/* Do NOT remove! */
 	}
 	
-	/* This is your access to things BEFORE the game loop starts */
+	/* Starting Conditions before game loop */
 	public static void start() {
 		
-		/* Populate array with new spriteInfo Objects */
-		while (currentVec.getX() <= 1280){
-			if (frameCounter >= 8){
-				frameCounter = 0;
-			}
-			sprites.add(new spriteInfo(new Vector2D(currentVec.getX(), currentVec.getY()), "stick"+frameCounter));
-			currentVec.adjustX(16); /* Controls Degree of Sprite Movement */
-			frameCounter++;
+		/* Populate the hashmap all in one loop */
+		int i = 0;	
+		while (i < ezr.getNumLines()){ 
+			raw = ezr.getNextLine();
+			st = new StringTokenizer(raw, "*");
+			String Key = st.nextToken();
+			String Value = st.nextToken();
+			map.put(Key, Value);
+			i++;
 		}
+		
+		/* Assign a random int from 0 to 4 */
+		randInt = new Random().nextInt(5); 
 	}
 	
 	
-	/* This is your access to the "game loop" (It is a "callback" method from the Control class (do NOT modify that class!))*/
+	/* The game loop */
 	public static void update(Control ctrl) {
 		
-		ctrl.addSpriteToFrontBuffer(currentSprite.getCoords().getX(), currentSprite.getCoords().getY(), currentSprite.getTag());
+		ctrl.addSpriteToFrontBuffer(100, 296, "stick3");
+		ctrl.drawString(100, 250, map.get("string"+randInt), Color.WHITE);
 		
-		/* Time-dependent array iteration */
-		if(timer.isTimeUp()){
-			currentSprite = sprites.get(currentSpriteIndex);
-			currentSpriteIndex++; 
-			if (currentSpriteIndex == (sprites.size() - 1)){ /* Restart Array Pointer */
-				currentSpriteIndex = 0;
-			}
-			timer.resetWatch(); /* Adjust timer in fields */
-		}
-	
-		
+		/* New dialogue every 5 seconds */
+		if (timer.isTimeUp()){ 
+			/* Never repeat the same line twice in a row*/
+			do {
+				tmpInt = new Random().nextInt(5);
+			} while (tmpInt == randInt); 
+			randInt = tmpInt;
+			timer.resetWatch();
+		}	
 	} 
 	
-	// Additional Static methods below...(if needed)
+	/* Additional Static methods below...(if needed) */
 
 }
