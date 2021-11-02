@@ -29,4 +29,13 @@ This project includes all of my major assignments for CSc130 at CSU, Sacramento.
  4. Create a cursor variable that holds the index of your current displayed frame (relative to your ArrayList). This makes for easy updating of the next frame once a timer is up.
  5. Using a timer, your ArrayList, and your custom engine, make the images move from the left side of the screen to the right. Once the image reaches the end of the animation, it should reset by making the cursor index 0.
 
+## CP4: Use a hashmap to store character dialogue lines; draw a new dialogue line every 5 seconds using a random key from the hashmap.
+ The requirements for this assignment are to:
+ 1. Name your animated character from Checkpoint #3
+ 2. Write five (5) lines of dialog for your character
+ 3. Save dialog into a text file using Key*Value pairs as described in this module
+ 4. Load text file into game engine in setup method. Load ALL dialog into a Java HashMap using a StringTokenizer to parse the lines into Key, Value pairs
+ 5. Retrieve a single line of text from your HashMap using the "get" method from Java's HashMap class and display it using the Gaming API "drawString" method (at location 100x, 250y).
+
+
  
