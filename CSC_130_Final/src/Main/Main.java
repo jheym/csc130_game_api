@@ -23,6 +23,9 @@ public class Main{
 	public static int tmpInt = 0; 
 	public static StringTokenizer st; /* The StringTokenizer variable need to be public */
 	public static HashMap<String, String> map = new HashMap<>(); /* map needs to be public */
+	
+	public static String trigger = "";
+	
 	/* End Static Fields */
 
 	public static void main(String[] args) {
@@ -44,7 +47,7 @@ public class Main{
 			i++;
 		}
 		
-		/* Assign a random int from 0 to 4 */
+		/* Initial Random Int Assignment (from 0 to 4) */
 		randInt = new Random().nextInt(5); 
 	}
 	
@@ -53,7 +56,7 @@ public class Main{
 	public static void update(Control ctrl) {
 		
 		ctrl.addSpriteToFrontBuffer(100, 296, "stick3");
-		ctrl.drawString(100, 250, map.get("string"+randInt), Color.WHITE);
+		ctrl.drawString(100, 250, trigger, Color.WHITE);
 		
 		/* New dialogue every 5 seconds */
 		if (timer.isTimeUp()){ 
