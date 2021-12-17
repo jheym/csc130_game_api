@@ -1,7 +1,7 @@
 // Name: 				Justin Heyman
 // Due Date:		 	17 Dec 2021
 // Assignment: 			Final Project		
-// Note to Professor: 	Thanks for making Data Structures and Algorithms a fun class!
+// Note to Professor: 	I'm gonna need you to rate my code on a scale of 1 to spaghetti
 
 
 package Main;
@@ -20,30 +20,35 @@ import logic.Control;
 public class Main{
 	
 	/* Begin Static Fields*/
-//	public static int currentSpriteIndex = 0; /* Points to index in sprites ArrayList */
-	public static int frameCounter = 0; /* To hold reference to current png */
-	public static Vector2D currentVec = new Vector2D(100, 296); /* To hold temporary 2DVector Position */
-	public static Vector2D lastVec = new Vector2D(0, 0);
-	public static spriteInfo playerSprite = new spriteInfo(currentVec, "stickR"+frameCounter); /* To hold temporary spriteInfo */
-	public static spriteInfo lastPos = new spriteInfo (lastVec, playerSprite.getTag()); //This is only getting assigned at the beginning
+	public static int frameCounter = 0; 			/* To hold reference to current png */
 	
-	public static spriteInfo boxSprite = new spriteInfo(new Vector2D(800, 296), "testBox");
-	public static boundingBox testBox = new boundingBox(boxSprite);
+	public static String trigger = ""; 				/* For toggling dialog */
+	public static String textTrigger = "nothing"; 	/* A really tiny transparent png for toggling */
+	
+	public static Vector2D currentVec = new Vector2D(100, 296); 	/* Holds current position of player */
+	public static Vector2D lastVec = new Vector2D(0, 0); 			/* Holds previous position of player */
+	
 	public static boundingBox playerBox;
-	public static ArrayList<boundingBox> boxes = new ArrayList<>();
+	public static boundingBox keyboard = new boundingBox(770, 815, 155, 270); /* Interactable object */
+	public static boundingBox elevator = new boundingBox(960, 1020, 75, 145); /* Interactable object */
 	
-	public static boundingBox keyboard = new boundingBox(770, 815, 155, 270);
-	public static boundingBox elevator = new boundingBox(960, 1020, 75, 145);
-	public static String trigger = "";
-	public static String textTrigger = "nothing";
+	public static spriteInfo playerSprite = new spriteInfo(currentVec, "stickR"+frameCounter);
+	public static spriteInfo dialogBox = new spriteInfo(new Vector2D(410, 500), textTrigger);
+	public static spriteInfo lastPos = new spriteInfo (lastVec, playerSprite.getTag()); 
+	
+	public static ArrayList<boundingBox> boxes = new ArrayList<>(); 	/* Holds bounding boxes */
+	public static ArrayList<spriteInfo> sprites = new ArrayList<>(); 	/* Holds sprites */
 	/* End Static Fields */
 
+	
+	/* No touchy! */
 	public static void main(String[] args) {
 		Control ctrl = new Control();				/* Do NOT remove! */
 		ctrl.gameLoop();							/* Do NOT remove! */
 	}
+	/* End no touchy */
 	
-	/* Starting Conditions before game loop */
+	
 	public static void start() {
 		
 		/* Defining all bounding boxes for static objects */
@@ -56,35 +61,40 @@ public class Main{
 		boxes.add(new boundingBox(780, 945, 520, 720)); // Bottom right server
 		boxes.add(new boundingBox(200, 370, 128, 420)); // top left server
 		boxes.add(new boundingBox(610, 780, 128, 430)); // top right server	
+		
+		/* To fulfill "Image Data Java Collection" Requirement */
+		/* Add all spriteInfo objects to an arrayList */
+		sprites.add(new spriteInfo(new Vector2D(0, 0), "background")); 
+		sprites.add(playerSprite);
+		sprites.add(dialogBox);
 	}
 		
 	
 	
-	/* The game loop */
+	/* THE GAME LOOP */
 	public static void update(Control ctrl) {
-		
-		ctrl.addSpriteToFrontBuffer(0, 0, "background");
 		
 		/* Player bounding box updated by current playerSprite position and adjusted bounds relative to origin (top left) */
 		playerBox = new boundingBox(playerSprite, 20, 108, 108, 120);  	
 		
-		/* Check collision between player and any rigid body stored in the array */
+		/* Check collision between player and any rigid body stored in the array and bounce the player if true */
 		for (int i = 0; i < boxes.size(); i++)
 			if (checkCollision(playerBox, boxes.get(i)))
-				bouncePlayer();
+				bouncePlayer(); 
 		
-		/* Player Sprite */
-		ctrl.addSpriteToFrontBuffer(playerSprite.getCoords().getX(), playerSprite.getCoords().getY(), playerSprite.getTag());
+		/* Drawing all sprites by iterating through an ArrayList */
+		for (int i = 0; i < sprites.size(); i++)
+			ctrl.addSpriteToFrontBuffer(sprites.get(i).getCoords().getX(), sprites.get(i).getCoords().getY(), 
+					sprites.get(i).getTag());
 		
-		/* Dialog Prompts */
-		ctrl.addSpriteToFrontBuffer(410, 500, textTrigger);
+		/* Keyprocessor Event, dialog is in KeyProcessor.java because there are no points for using File IO or tokenizers */
 		ctrl.drawString(415, 600, trigger, Color.GREEN);
 	}
 	
 	
-	/* Additional Static methods below...(if needed) */
+	/////////* STATIC METHODS */////////
 	
-	/* Method for checking a collision. If any of the comparisons are true, there is no collision. */
+	/* If any of the comparisons are true in the entire clause, there is no collision. */
 	public static boolean checkCollision(boundingBox box1, boundingBox box2){
 		if (((box1.getX1() > box2.getX2()) 
 			|| (box1.getX2() < box2.getX1()) 
@@ -98,15 +108,15 @@ public class Main{
 	/* Method for bouncing the player back to the last position after a collision detection */
 	public static void bouncePlayer(){
 		if ((playerSprite.getCoords().getX() - lastPos.getCoords().getX()) != 0){
-			if ((playerSprite.getCoords().getX() - lastPos.getCoords().getX()) > 0)		// Moved from West to East
-				playerSprite.getCoords().adjustX(-16);
-			if ((playerSprite.getCoords().getX() - lastPos.getCoords().getX()) < 0)  	// Moved from East to West
+			if ((playerSprite.getCoords().getX() - lastPos.getCoords().getX()) > 0)		// If moved from West to East
+				playerSprite.getCoords().adjustX(-16);								
+			if ((playerSprite.getCoords().getX() - lastPos.getCoords().getX()) < 0)  	// If moved from East to West
 				playerSprite.getCoords().adjustX(+16);
 		}
 		if ((playerSprite.getCoords().getY() - lastPos.getCoords().getY()) != 0){
-			if ((playerSprite.getCoords().getY() - lastPos.getCoords().getY()) > 0)		// Moved from North to South
+			if ((playerSprite.getCoords().getY() - lastPos.getCoords().getY()) > 0)		// If moved from North to South
 				playerSprite.getCoords().adjustY(-16);
-			if ((playerSprite.getCoords().getY() - lastPos.getCoords().getY()) < 0)		// Moved from South to North
+			if ((playerSprite.getCoords().getY() - lastPos.getCoords().getY()) < 0)		// If moved from South to North
 				playerSprite.getCoords().adjustY(+16);
 		}
 	}
