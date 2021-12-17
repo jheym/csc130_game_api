@@ -7,26 +7,33 @@ import timer.stopWatchX;
 
 public class KeyProcessor{
 	// Static Fields
-	private static char last = ' ';			// For debouncing purposes
-	private static stopWatchX sw = new stopWatchX(250); // Debouncing Timer
-	private static stopWatchX timer = new stopWatchX(85); // Timer for movement
-	private static int i, j;
+	private static char last = ' ';							// For debouncing purposes
+	private static stopWatchX sw = new stopWatchX(250); 	// Debouncing Timer
+	private static stopWatchX timer = new stopWatchX(85); 	// Timer for movement
+	private static int i, j; 								// For incrementing sprite tag numbers
 	
 	// Static Method(s)
 	public static void processKey(char key){
 
-//		/* USE THIS BLOCK FOR ACTION KEYS CASES ONLY */
+		/* Place this block in each action key switch case */
 //		if(key == ' ')				return;
 //		// Debounce routine below...
 //		if(key == last)
 //			if(sw.isTimeUp() == false)			return;
 //		last = key;
 //		sw.resetWatch();
-//		/* END BLOCK */
+		/* END BLOCK */
 		
-		/* TODO: You can modify values below here! */
+		
 		switch(key){
 		case '%':								// ESC key
+			if(key == ' ')				return;
+			// Debounce routine below...
+			if(key == last)
+				if(sw.isTimeUp() == false)			return;
+			last = key;
+			sw.resetWatch();
+			
 			System.exit(0);
 			break;
 		
@@ -43,12 +50,12 @@ public class KeyProcessor{
 			/* Code to open dialog boxes */
 			if(Main.checkCollision(Main.playerBox, Main.keyboard)){
 				Main.trigger = "You've hacked the mainframe!";
-				Main.textTrigger = "textbg";
+				Main.dialogBox.setTag("textbg");
 			}
 			
 			if(Main.checkCollision(Main.playerBox, Main.elevator)){
 				Main.trigger = "The elevator is broken!";
-				Main.textTrigger = "textbg";
+				Main.dialogBox.setTag("textbg");
 			}
 
 			break;
@@ -70,13 +77,11 @@ public class KeyProcessor{
 		/* Move North */
 		case 'w':
 			Main.trigger = "";
-			Main.textTrigger = "nothing";
+			Main.dialogBox.setTag("nothing");
 			if (timer.isTimeUp()){
-				int x = Main.playerSprite.getCoords().getX();
-				int y = Main.playerSprite.getCoords().getY();
-				Main.lastPos.setCoords(x, y);
+				Main.lastPos.setCoords(Main.playerSprite.getCoords().getX(), Main.playerSprite.getCoords().getY());
 				Main.playerSprite.getCoords().adjustY(-16);
-				Main.playerSprite.setTag("stickV"+j);
+				Main.playerSprite.setTag("stickV"+j); 
 				j++;
 				if (j >= 16){
 					j = 0;
@@ -88,12 +93,10 @@ public class KeyProcessor{
 		
 		/* Move West */	
 		case 'a':
-			Main.trigger = "";
-			Main.textTrigger = "nothing";
-			if (timer.isTimeUp()){
-				int x = Main.playerSprite.getCoords().getX();
-				int y = Main.playerSprite.getCoords().getY();
-				Main.lastPos.setCoords(x, y);
+			Main.trigger = ""; 										// Toggles off dialogue text
+			Main.dialogBox.setTag("nothing");						// Toggles off dialogue background
+			if (timer.isTimeUp()){									
+				Main.lastPos.setCoords(Main.playerSprite.getCoords().getX(), Main.playerSprite.getCoords().getY());
 				Main.playerSprite.getCoords().adjustX(-16);
 				Main.playerSprite.setTag("stickL"+i);
 				i++;
@@ -107,11 +110,9 @@ public class KeyProcessor{
 		/* Move South */
 		case 's':
 			Main.trigger = "";
-			Main.textTrigger = "nothing";
+			Main.dialogBox.setTag("nothing");
 			if (timer.isTimeUp()){
-				int x = Main.playerSprite.getCoords().getX();
-				int y = Main.playerSprite.getCoords().getY();
-				Main.lastPos.setCoords(x, y);
+				Main.lastPos.setCoords(Main.playerSprite.getCoords().getX(), Main.playerSprite.getCoords().getY());
 				Main.playerSprite.getCoords().adjustY(16);
 				Main.playerSprite.setTag("stickV"+j);
 				j++;
@@ -125,11 +126,9 @@ public class KeyProcessor{
 		/* Move East */	
 		case 'd':
 			Main.trigger = "";
-			Main.textTrigger = "nothing";
+			Main.dialogBox.setTag("nothing");
 			if (timer.isTimeUp()){
-				int x = Main.playerSprite.getCoords().getX();
-				int y = Main.playerSprite.getCoords().getY();
-				Main.lastPos.setCoords(x, y);
+				Main.lastPos.setCoords(Main.playerSprite.getCoords().getX(), Main.playerSprite.getCoords().getY());
 				Main.playerSprite.getCoords().adjustX(16);
 				Main.playerSprite.setTag("stickR"+i);
 				i++;
