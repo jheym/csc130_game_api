@@ -27,15 +27,17 @@ public class Main{
 	public static spriteInfo playerSprite = new spriteInfo(currentVec, "stickR"+frameCounter); /* To hold temporary spriteInfo */
 	public static spriteInfo lastPos = new spriteInfo (lastVec, playerSprite.getTag()); //This is only getting assigned at the beginning
 	
-	public static spriteInfo boxSprite = new spriteInfo(new Vector2D(800, 296), "testBox");
-	public static boundingBox testBox = new boundingBox(boxSprite);
 	public static boundingBox playerBox;
 	public static ArrayList<boundingBox> boxes = new ArrayList<>();
+	public static ArrayList<spriteInfo> sprites = new ArrayList<>();
 	
 	public static boundingBox keyboard = new boundingBox(770, 815, 155, 270);
 	public static boundingBox elevator = new boundingBox(960, 1020, 75, 145);
 	public static String trigger = "";
 	public static String textTrigger = "nothing";
+	
+	public static spriteInfo dialogBox = new spriteInfo(new Vector2D(410, 500), textTrigger);
+	
 	/* End Static Fields */
 
 	public static void main(String[] args) {
@@ -56,6 +58,10 @@ public class Main{
 		boxes.add(new boundingBox(780, 945, 520, 720)); // Bottom right server
 		boxes.add(new boundingBox(200, 370, 128, 420)); // top left server
 		boxes.add(new boundingBox(610, 780, 128, 430)); // top right server	
+		
+		/* To fulfill "Image Data Java Collection" Requirement */
+		sprites.add(new spriteInfo(new Vector2D(0, 0), "background")); 
+		sprites.add(dialogBox);
 	}
 		
 	
@@ -63,18 +69,21 @@ public class Main{
 	/* The game loop */
 	public static void update(Control ctrl) {
 		
-		ctrl.addSpriteToFrontBuffer(0, 0, "background");
-		
 		/* Player bounding box updated by current playerSprite position and adjusted bounds relative to origin (top left) */
 		playerBox = new boundingBox(playerSprite, 20, 108, 108, 120);  	
 		
 		/* Check collision between player and any rigid body stored in the array */
 		for (int i = 0; i < boxes.size(); i++)
 			if (checkCollision(playerBox, boxes.get(i)))
-				bouncePlayer();
+				bouncePlayer(); 				// Move the player to previous position before sprite gets added to front buffer!
+		
+		/* Draws the level sprites that are not the player (there is only one sprite) */
+		ctrl.addSpriteToFrontBuffer(sprites.get(0).getCoords().getX(), sprites.get(0).getCoords().getY(), 
+				sprites.get(0).getTag());
 		
 		/* Player Sprite */
-		ctrl.addSpriteToFrontBuffer(playerSprite.getCoords().getX(), playerSprite.getCoords().getY(), playerSprite.getTag());
+		 ctrl.addSpriteToFrontBuffer(playerSprite.getCoords().getX(), playerSprite.getCoords().getY(), 
+				 playerSprite.getTag());
 		
 		/* Dialog Prompts */
 		ctrl.addSpriteToFrontBuffer(410, 500, textTrigger);
